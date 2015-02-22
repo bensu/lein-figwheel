@@ -78,6 +78,7 @@
     (auto/after (partial check-changes figwheel-server))
     (auto/after notify-on-complete)
     (auto/error (partial handle-exceptions figwheel-server))
+    (auto/before (fn [_] (fig/notify-client-on-start figwheel-server)))
     (auto/before auto/compile-start)))
 
 (defn autobuild* [{:keys [builds figwheel-server]}]
