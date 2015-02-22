@@ -67,6 +67,9 @@
 (defn rewarning-state? [msg-names]
   (= [:compile-warning :files-changed :compile-warning] (take 3 msg-names)))
 
+(defn compile-started? [msg-names]
+  (= :compile-started (first msg-names)))
+
 (defn compile-fail-state? [msg-names]
   (= :compile-failed (first msg-names)))
 
@@ -160,11 +163,14 @@
 
 ;; this is seperate for live dev only
 (defn heads-up-plugin-msg-handler [opts msg-hist']
-  (let [msg-hist (focus-msgs #{:files-changed :compile-warning :compile-failed} msg-hist')
+  (let [msg-hist (focus-msgs #{:files-changed :compile-started :compile-warning :compile-failed} msg-hist')
         msg-names (map :msg-name msg-hist)
         msg (first msg-hist)]
     (go
      (cond
+      (compile-started? msg-names)
+      (<! (heads-up/flash-starting))
+      
       (reload-file-state? msg-names opts)
       (if (:autoload opts)
         (<! (heads-up/flash-loaded))
@@ -282,11 +288,11 @@
     config))
 
 (defn base-plugins [system-options]
-  (let [base {:enforce-project-plugin enforce-project-plugin
+  (let [base {:enforce-project-plugin   enforce-project-plugin
               :file-reloader-plugin     file-reloader-plugin
               :comp-fail-warning-plugin compile-fail-warning-plugin
               :css-reloader-plugin      css-reloader-plugin
-              :repl-plugin      repl-plugin}
+              :repl-plugin              repl-plugin}
        base  (if (not (.. js/goog inHtmlDocument_)) ;; we are in node?
                (select-keys base [#_:enforce-project-plugin
                                   :file-reloader-plugin

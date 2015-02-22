@@ -168,17 +168,21 @@
      (<! (timeout 200))
      (set-content! c ""))))
 
-(defn display-loaded-start []
-  (display-heads-up {:backgroundColor "rgba(211,234,172,1.0)"
+(defn display-logo [color]
+  (display-heads-up {:backgroundColor color 
                      :width "68px"
                      :height "68px"                     
                      :paddingLeft "0px"
                      :paddingRight "0px"
                      :borderRadius "35px" } ""))
 
+(defn flash-starting []
+  (go
+   (<! (display-logo "rgba(255,255,255,1.0)"))))
+
 (defn flash-loaded []
   (go
-   (<! (display-loaded-start))
+   (<! (display-logo "rgba(211,234,172,1.0)"))
    (<! (timeout 400))
    (<! (clear))))
 
