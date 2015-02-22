@@ -346,7 +346,7 @@
 ;; obvious that I was doing way to much work here.
 
 (defn notify-client-on-start [st]
-  (send-message! st :compilation-started {}))
+  (send-message! st :compile-started {}))
 
 (defn notify-cljs-ns-changes [state ns-syms]
   (->> ns-syms
@@ -477,7 +477,7 @@
   ([] (start-server {}))
   ([opts]
    (let [state (create-initial-state (resolve-ring-handler opts))]
-     (println (str "Figwheel: Starting server aaa/t http://localhost:" (:server-port state)))
+     (println (str "Figwheel: Starting server at http://localhost:" (:server-port state)))
      (assoc state :http-server (server state)))))
 
 (defn stop-server [{:keys [http-server]}]
