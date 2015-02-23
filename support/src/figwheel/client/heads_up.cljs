@@ -111,19 +111,6 @@
      (<! (timeout 300))
      (set-style! c {:height "auto"}))))
 
-(defn clear []
-  (go
-   (let [c (ensure-container)]
-     (set-style! c { :opacity "0.0" })
-     (<! (timeout 300))
-     (set-style! c { :width "auto"
-                    :height "0px"
-                    :minHeight "0px"
-                    :padding "0px 10px 0px 70px"
-                    :borderRadius "0px"
-                    :backgroundColor "transparent" })
-     (<! (timeout 200))
-     (set-content! c ""))))
 
 (defn heading [s]
   (str"<div style=\""
@@ -169,6 +156,19 @@
     (set! (.-innerHTML el) (format-line message))
     (.appendChild content-area-el el)))
 
+(defn clear []
+  (go
+   (let [c (ensure-container)]
+     (set-style! c { :opacity "0.0" })
+     (<! (timeout 300))
+     (set-style! c { :width "auto"
+                    :height "0px"
+                    :minHeight "0px"
+                    :padding "0px 10px 0px 70px"
+                    :borderRadius "0px"
+                    :backgroundColor "transparent" })
+     (<! (timeout 200))
+     (set-content! c ""))))
 
 
 (defn display-logo [color]
